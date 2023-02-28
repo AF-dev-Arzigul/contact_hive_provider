@@ -1,7 +1,8 @@
-import 'package:ari_oldirmaganman/ContactModel.dart';
-import 'package:ari_oldirmaganman/home_page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'ContactModel.dart';
+import 'di.dart';
+import 'home_page_provider.dart';
 
 class HivePage extends StatefulWidget {
   const HivePage({Key? key}) : super(key: key);
@@ -79,31 +80,37 @@ class _HivePageState extends State<HivePage> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       context: context,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Text("Add contact", style: TextStyle(fontSize: 20, color: Colors.green)),
-              const SizedBox(height: 20),
-              TextField(
-                controller: nameController,
+        return ChangeNotifierProvider(
+          create: (context) => di.get<HomePageProvider>(),
+          builder: (context, child) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const Text("Add contact", style: TextStyle(fontSize: 20, color: Colors.green)),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: nameController,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: numberController,
+                  ),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                      onPressed: () {
+                        // onTap(ContactModel(nameController.text, numberController.text));
+                        context.read<HomePageProvider>().addContact(ContactModel(nameController.text, numberController.text));
+                        print("bottom sheet");
+                        nameController.clear();
+                        numberController.clear();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Add"))
+                ],
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: numberController,
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                  onPressed: () {
-                    onTap(ContactModel(nameController.text, numberController.text));
-                    print("bottom sheet");
-                    nameController.clear();
-                    numberController.clear();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Add"))
-            ],
-          ),
+            );
+          },
         );
       },
     );

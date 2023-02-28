@@ -1,8 +1,8 @@
-import 'package:ari_oldirmaganman/di.dart';
-import 'package:ari_oldirmaganman/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'home_page.dart';
 import 'home_page_provider.dart';
+import 'di.dart';
 
 void main() async {
   await setUp();
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: ChangeNotifierProvider(
-        create: (context) => HomePageProvider(),
+        create: (context) => di.get<HomePageProvider>(),
         builder: (context, child) {
           return const HivePage();
         },
